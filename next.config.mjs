@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "export",
-  basePath: "/",
   webpack: config => {
     config.resolve.fallback = {
       fs: false,

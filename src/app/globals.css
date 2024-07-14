@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: 'Ac437_DTK_BIOS';
+    src: url('/fonts/Ac437_DTK_BIOS.ttf');
+  }
+
+  @font-face {
+    font-family: 'Ac437_EpsonMGA_Alt';
+    src: url('/fonts/Ac437_EpsonMGA_Alt.ttf');
+  }
+
+  @font-face {
+    font-family: 'Web437_DTK_BIOS';
+    src: url('/fonts/Web437_DTK_BIOS.woff');
+  }
+
+  @font-face {
+    font-family: 'Web437_Epson_MGA_Alt';
+    src: url('/fonts/Web437_EpsonMGA_Alt.woff');
+  }
+
+  .header {
+    @apply flex h-[136px] w-full flex-row flex-wrap bg-default-bg font-bios sm:h-[68px] sm:flex-nowrap sm:justify-between sm:px-6 xl:px-[120px];
+  }
+  .nav {
+    @apply flex w-full flex-col text-sm/[64px] text-white sm:flex-row sm:text-base;
+  }
+  .nav-link {
+    @apply flex items-center uppercase first-of-type:pl-4 hover:bg-red-bg hover:text-[#272829] active:bg-red-bg active:text-[#272829] sm:px-5 md:text-lg md:text-xl lg:px-4;
+  }
+
+  .active {
+    @apply bg-red-bg text-[#272829];
+  }
+
+  .block-p {
+    @apply text-left md:text-justify text-base/[22px] sm:text-[18px] md:leading-6 lg:text-[20px]/[28px];
+  }
+}
+
+html {
+  font-family: 'Ac437_EpsonMGA_Alt', 'Web437_Epson_MGA_Alt', sans-serif;
+  font-size: 16px;
+  background: #181818;
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: #555;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACAQMAAABIeJ9nAAAABlBMVEWqqqpVVVWzGxUgAAAADElEQVQI12NwYHIAAAEIAIPJpZSRAAAAAElFTkSuQmCC);
+  }
+
+  ::-webkit-scrollbar-track {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACAQMAAABFZu8gAAAABlBMVEUAqqoAAAC9JseZAAAADElEQVQI12N4wHQBAAN4AbOxhpasAAAAAElFTkSuQmCC);
+  }
+}
+
+body {
+  display: flex;
+  justify-content: center;
+}
+

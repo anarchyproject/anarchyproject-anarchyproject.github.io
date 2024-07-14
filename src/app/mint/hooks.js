@@ -3,7 +3,7 @@ import {waitForTransactionReceipt, writeContract} from '@wagmi/core';
 
 import xACAbi from "./xAC.abi.json";
 import xBTCAbi from "./xBTC.abi.json";
-import {formatEther, parseEther} from "viem";
+import {formatEther, parseEther, parseUnits} from "viem";
 import {config} from "~/config";
 
 const xACContract = "0x77B4E87A28B26DBEc5957E9A599dB93AAC70Ae37";
@@ -50,7 +50,7 @@ export function useMintXBTC(amount = parseEther("1")) {
   return { mintXBTC };
 }
 
-export function useMintXAC(amount = parseEther("1")) {
+export function useMintXAC(amount = parseUnits("1", 8)) {
   const address = useAccount().address;
 
   const mintXAC = async () => {

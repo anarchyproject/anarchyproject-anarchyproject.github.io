@@ -4,7 +4,7 @@ import { useConnect } from 'wagmi'
 import { useAccount, useDisconnect, useEnsAvatar, useEnsName } from 'wagmi';
 import {useCalcWithdrawAmount, useGetMYBTCAmount, useMintXAC, useMintXBTC, useTotalSupply} from "~/app/mint/hooks";
 import {useState} from "react";
-import {formatEther, parseEther} from "viem";
+import {formatEther, formatUnits, parseEther, parseUnits} from "viem";
 import {Modal} from "~/components/modal";
 
 export function Account() {
@@ -56,10 +56,10 @@ function Icon({ path }) {
 export default function Mint() {
   const [btcAmount, setBtcAmount] = useState("0.0001");
   const { data: totalSupply} = useTotalSupply();
-  const { data: withdrawAmount } = useCalcWithdrawAmount(parseEther(btcAmount));
+  const { data: withdrawAmount } = useCalcWithdrawAmount(parseUnits(btcAmount, 8));
   const { mintXBTC } = useMintXBTC();
   const isConnected = useAccount().isConnected;
-  const { mintXAC } = useMintXAC(parseEther(btcAmount));
+  const { mintXAC } = useMintXAC(parseUnits(btcAmount, 8));
 
   return (
     <div className="flex flex-col text-white">
@@ -70,7 +70,7 @@ export default function Mint() {
             <span className="font-bios text-[#cc6600] xl:text-[28px]">4.102 643 204</span>
           </Block>
           <Block icon={<Icon path="/icons/AC.svg"/>} title="Total AC Minted">
-            <span className="font-bios text-[#cc6600] xl:text-[28px]">{formatEther(totalSupply || BigInt(1))}</span>
+            <span className="font-bios text-[#cc6600] xl:text-[28px]">{formatUnits(totalSupply || BigInt(1), 4)}</span>
           </Block>
         </div>
         <Block
@@ -96,7 +96,7 @@ export default function Mint() {
               <span>To mint</span>
               <div className="flex gap-6 pl-2 text-[#00AA00]">
                 <span>AC</span>
-                <span>{(withdrawAmount && formatEther(withdrawAmount)) || 0}</span>
+                <span>{(withdrawAmount && formatUnits(withdrawAmount, 4)) || 0}</span>
               </div>
             </div>
             <button

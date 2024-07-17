@@ -1,13 +1,16 @@
 import {useAccount, useContractRead, useContractWrite} from "wagmi";
-import {waitForTransactionReceipt, writeContract} from '@wagmi/core';
+import {readContract, waitForTransactionReceipt, writeContract} from '@wagmi/core';
 
 import xACAbi from "./xAC.abi.json";
 import xBTCAbi from "./xBTC.abi.json";
-import {formatEther, parseEther, parseUnits} from "viem";
+import {formatEther, formatUnits, parseEther, parseUnits} from "viem";
 import {config} from "~/config";
+import {useQuery} from "wagmi/query";
 
-const xACContract = "0x77B4E87A28B26DBEc5957E9A599dB93AAC70Ae37";
+const xACContract = "0x1b9b4F406DBeFa33d47fF342134A2765E90Ac37e";
 const xBTCContract = "0x2d44161d68ac8ebccf7beb59fb84cbfe87abba9a";
+const ONE_AC = parseUnits('1', 4);
+const ONE_BTC = parseUnits('1', 8);
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -20,16 +23,64 @@ export const useTotalSupply = () => {
   })
 }
 
-export function useCalcWithdrawAmount(amount = parseEther("1")) {
-  const {data: totalSupply} = useTotalSupply();
-  const res = useContractRead({
+export const useGetTotalBtcBurned = () => {
+  return useContractRead({
     address: xACContract,
-      abi: xACAbi,
-    functionName: "calcWithdrowAmount",
-    args: [amount, totalSupply],
-  });
+    abi: xACAbi,
+    functionName: "btcBurned",
+    args: [],
+  })
+}
 
-  return res
+const getTotalSupply = async () => {
+  const res = await readContract(config,
+    {
+      address: xACContract,
+      abi: xACAbi,
+      functionName: "totalSupply",
+      args: [],
+    }
+  );
+
+  return res;
+};
+
+const btcForSingleAC = async () => {
+  const totalSupply = await getTotalSupply();
+
+  try {
+
+    const btcForOneAC = await readContract(config, {
+      address: xACContract,
+      abi: xACAbi,
+      functionName: "calcWithdrowAmount",
+      args: [ONE_AC, totalSupply],
+    });
+
+    console.log({btcForOneAC})
+
+    return btcForOneAC;
+  } catch (e) {
+    console.log({e})
+  }
+};
+
+const calcBtcToAc = async (btcAmount) => {
+  const BTCForOneAc = await btcForSingleAC();
+  const btcRate = ONE_BTC / BTCForOneAc;
+  console.log({btcRate})
+  console.log({btcAmount})
+
+  const acAmount = (ONE_BTC / BTCForOneAc) * btcAmount;
+  console.log({acAmount})
+  return acAmount;
+};
+
+export function useCalcWithdrawAmount(amount = parseUnits("1", 8)) {
+  return useQuery({
+    queryKey: ["calcWithdrawAmount", formatUnits(amount, 8)],
+    queryFn: () => calcBtcToAc(amount),
+  });
 }
 
 export function useMintXBTC(amount = parseEther("1")) {
@@ -47,7 +98,7 @@ export function useMintXBTC(amount = parseEther("1")) {
     return res;
   };
 
-  return { mintXBTC };
+  return {mintXBTC};
 }
 
 export function useMintXAC(amount = parseUnits("1", 8)) {
@@ -55,7 +106,7 @@ export function useMintXAC(amount = parseUnits("1", 8)) {
 
   const mintXAC = async () => {
     try {
-      const approvalRes= await writeContract(config,{
+      const approvalRes = await writeContract(config, {
         abi: xBTCAbi,
         address: xBTCContract,
         functionName: "approve",
@@ -75,7 +126,7 @@ export function useMintXAC(amount = parseUnits("1", 8)) {
     }
   };
 
-  return { mintXAC };
+  return {mintXAC};
 }
 
 export const useGetMYBTCAmount = () => {

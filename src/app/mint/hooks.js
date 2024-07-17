@@ -112,15 +112,16 @@ export function useMintXAC(amount = parseUnits("1", 8)) {
         functionName: "approve",
         args: [xACContract, amount],
       });
-
+      const acAmount = await calcBtcToAc(amount);
       const txRec = await waitForTransactionReceipt(config, {hash: approvalRes});
 
       const mintRes = await writeContract(config, {
         abi: xACAbi,
         address: xACContract,
         functionName: "mint",
-        args: [address, amount],
+        args: [address, parseUnits('1', 4)],
       });
+      console.log({mintRes})
     } catch (e) {
       console.log(e);
     }

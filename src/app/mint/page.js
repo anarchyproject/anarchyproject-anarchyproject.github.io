@@ -1,51 +1,14 @@
 "use client";
 
-import {useConnect} from 'wagmi'
-import {useAccount, useDisconnect, useEnsAvatar, useEnsName} from 'wagmi';
-import {
-  useCalcWithdrawAmount,
-  useGetMYBTCAmount,
-  useGetTotalBtcBurned,
-  useMintXAC,
-  useMintXBTC,
-  useTotalSupply
-} from "~/app/mint/hooks";
+import {useCalcWithdrawAmount, useGetTotalBtcBurned, useMintXAC, useTotalSupply} from "~/app/mint/hooks";
 import {useState} from "react";
-import {formatEther, formatUnits, parseEther, parseUnits} from "viem";
-import {Modal} from "~/components/modal";
-
-export function Account() {
-  const {address} = useAccount()
-  const {disconnect} = useDisconnect()
-  const {data: ensName} = useEnsName({address})
-  const {data: ensAvatar} = useEnsAvatar({name: ensName})
-
-  return (
-    <div className="flex flex-col bg-default-bg border border-gray-500 gap-3 mx-auto p-2">
-      {ensAvatar && <img alt="ENS Avatar" src={ensAvatar}/>}
-      {address && <div>{ensName ? `${ensName} (${address})` : address}</div>}
-      <button className="boder border-gray-50 border bg-gray-700" onClick={() => disconnect()}>Disconnect</button>
-    </div>
-  )
-}
-
-export function WalletOptions() {
-  const {connectors, connect} = useConnect()
-
-  return (<Modal>
-    <div className="flex flex-col gap-5">
-      {connectors.map((connector) => (
-        <button className="p-4 border border-gray-50 bg-default-bg" key={connector.uid}
-                onClick={() => connect({connector})}>
-          {connector.name}
-        </button>))}
-    </div>
-  </Modal>);
-}
+import {formatUnits, parseUnits} from "viem";
+import {ConnectOrAccountButton} from "~/components/wallet-connect-acc-btn";
 
 function Block({title, icon, children}) {
   return (
-    <div className="flex flex-col gap-8 border border-[#6424247A] p-10 shadow-squareDefault xl:w-[560px] xl:pb-6">
+    <div
+      className="flex bg-[#181818] flex-col gap-8 border border-[#6424247A] p-10 shadow-squareDefault xl:w-[560px] xl:pb-6">
       <div className="flex w-full items-center justify-between gap-4 xl:gap-0">
         <span className="font-bios text-base xl:text-nowrap xl:text-xl">{title}</span>
         {icon}
@@ -65,16 +28,14 @@ export default function Mint() {
   const [btcAmount, setBtcAmount] = useState("0.0001");
   const {data: totalSupply} = useTotalSupply();
   const {data: withdrawAmount} = useCalcWithdrawAmount(parseUnits(btcAmount, 8));
-  const {mintXBTC} = useMintXBTC();
-  const isConnected = useAccount().isConnected;
   const {mintXAC} = useMintXAC(parseUnits(btcAmount, 8));
-  const { data: btcBurned } = useGetTotalBtcBurned();
+  const {data: btcBurned} = useGetTotalBtcBurned();
 
   return (
-    <div className="flex flex-col text-white">
-      {isConnected ? <Account/> : <WalletOptions/>}
+    <div className="flex flex-col text-white bg-mint">
+      <ConnectOrAccountButton />
       <div className="flex flex-col justify-center gap-12 p-5 text-white md:flex-row">
-        <div className="flex flex-col justify-between gap-12">
+        <div className="flex flex-col bg-[#181818] justify-between gap-12">
           <Block icon={<Icon path="/icons/BTC.svg"/>} title="Total BTC Burnt">
             <span className="font-bios text-[#cc6600] xl:text-[28px]">{formatUnits(btcBurned || BigInt(0), 4)}</span>
           </Block>

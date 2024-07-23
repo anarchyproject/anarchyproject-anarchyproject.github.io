@@ -139,3 +139,15 @@ export const useGetMYBTCAmount = () => {
     args: [address],
   })
 }
+
+export const useAcBalance = (address) => {
+  const {data: balance} = useContractRead({
+    address: xACContract,
+    abi: xACAbi,
+    functionName: "balanceOf",
+    args: [address],
+  });
+  console.log(balance)
+
+  return balance ? formatUnits(balance, 8) : 0;
+}

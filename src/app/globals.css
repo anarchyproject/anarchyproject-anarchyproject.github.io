@@ -40,6 +40,10 @@
   .block-p {
     @apply text-left md:text-justify text-base/[22px] sm:text-[18px] md:leading-6 lg:text-[20px]/[28px];
   }
+
+  .bg-mint {
+
+  }
 }
 
 html {

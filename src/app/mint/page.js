@@ -125,9 +125,9 @@ function MintSuccessModal({state, setState}) {
 export default function Mint() {
   const [btcAmount, setBtcAmount] = useState("0.0001");
   const {data: totalSupply} = useTotalSupply();
-  const {data: withdrawAmount} = useCalcWithdrawAmount(parseUnits(btcAmount, 8));
+  const {data: withdrawAmount} = useCalcWithdrawAmount(parseUnits(btcAmount, 4));
   const [mintState, setMintState] = useState({status: 'idle'});
-  const {mintXAC} = useMintXAC(parseUnits(btcAmount, 8), setMintState);
+  const {mintXAC} = useMintXAC(parseUnits(btcAmount, 4), setMintState);
   const {data: btcBurned} = useGetTotalBtcBurned();
 
   return (
@@ -169,7 +169,7 @@ export default function Mint() {
               <span>To mint</span>
               <div className="flex gap-6 pl-2 text-[#00AA00]">
                 <span>AC</span>
-                <span>{(withdrawAmount && formatUnits(withdrawAmount, 4)) || 0}</span>
+                <span>{(withdrawAmount && formatUnits(withdrawAmount, 8)) || 0}</span>
               </div>
             </div>
             <button

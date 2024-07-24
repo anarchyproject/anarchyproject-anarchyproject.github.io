@@ -95,7 +95,7 @@ export function useMintXBTC(amount = parseEther("1")) {
   return {mintXBTC};
 }
 
-export function useMintXAC(amount = parseUnits("1", 8), setMintState) {
+export function useMintXAC(btcAmount = parseUnits("1", 4), setMintState) {
   const address = useAccount().address;
 
   const mintXAC = async () => {
@@ -105,9 +105,9 @@ export function useMintXAC(amount = parseUnits("1", 8), setMintState) {
         abi: xBTCAbi,
         address: xBTCContract,
         functionName: "approve",
-        args: [xACContract, amount],
+        args: [xACContract, btcAmount],
       });
-      const acAmount = await calcBtcToAc(amount);
+      const acAmount = await calcBtcToAc(btcAmount);
       const txRec = await waitForTransactionReceipt(config, {hash: approvalRes});
 
       setMintState({ status: 'waitingMint' });
@@ -120,7 +120,7 @@ export function useMintXAC(amount = parseUnits("1", 8), setMintState) {
 
       const txRec2 = await waitForTransactionReceipt(config, {hash: mintRes});
 
-      setMintState({ status: 'success', payload: { hash: mintRes, amount: acAmount } });
+      setMintState({ status: 'success', payload: { hash: mintRes, amount: formatUnits(acAmount, 8) } });
       return txRec2;
     } catch (e) {
       setMintState({ status: 'error', payload: { message: e?.details || e?.message } });
@@ -149,5 +149,5 @@ export const useAcBalance = (address) => {
     args: [address],
   });
 
-  return balance ? formatUnits(balance, 4) : 0;
+  return balance ? formatUnits(balance, 8) : 0;
 }

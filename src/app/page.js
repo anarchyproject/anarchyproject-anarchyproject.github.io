@@ -1,5 +1,4 @@
 "use client";
-import {WarningBlock} from "~/components/warning-block";
 import {BlockWithTitle} from "~/components/block-with-title";
 import {Hl} from "~/components/hl";
 import Image from "next/image";

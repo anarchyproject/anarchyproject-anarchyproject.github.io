@@ -40,7 +40,8 @@ function MintWaitingModal({state, setState}) {
   return (
     <Modal setIsOpen={() => setState({status: 'idle'})}>
       <div className="font-bios flex flex-col items-center justify-center">
-        <div className="m-4 h-[48px] w-[48px] animate-spin self-center rounded-full border-[2px] border-[#f3f3f3] border-t-[gray] bg-[50%]"></div>
+        <div
+          className="m-4 h-[48px] w-[48px] animate-spin self-center rounded-full border-[2px] border-[#f3f3f3] border-t-[gray] bg-[50%]"></div>
         <div className="font-bold my-5">Waiting</div>
         <div className="max-w-[460px] font-sans text-center">{text}</div>
       </div>
@@ -56,7 +57,8 @@ function MintErrorModal({state, setState}) {
   return (
     <Modal setIsOpen={() => setState({status: 'idle'})}>
       <div className="font-bios flex flex-col items-center justify-center">
-        <div className="m-4 h-[48px] w-[48px] animate-spin self-center rounded-full border-[2px] border-[#f3f3f3] border-t-[gray] bg-[50%]"></div>
+        <div
+          className="m-4 h-[48px] w-[48px] animate-spin self-center rounded-full border-[2px] border-[#f3f3f3] border-t-[gray] bg-[50%]"></div>
         <div className="font-bold my-5">Error</div>
         <div className="max-w-[460px] text-[#aa0000] font-bios text-center">{state?.payload?.message}</div>
       </div>
@@ -96,7 +98,7 @@ function MintSuccessModal({state, setState}) {
           <a
             href={`https://twitter.com/intent/tweet?text=${shareText}&url=${encodedUrl}`}
             target="_blank"
-            className="flex cursor-pointer flex-col items-center justify-center"
+            className="flex cursor-pointer flex-col gap-2 items-center justify-center"
           >
             <div className="flex h-[43px] w-[43px] items-center justify-center rounded-lg bg-[#ffffff14]">
               <Image width={16} height={17} src={twitterIcon} alt="twitter"/>
@@ -106,7 +108,7 @@ function MintSuccessModal({state, setState}) {
           <a
             href={`https://t.me/share/url?url=${encodedUrl}&text=${shareText}`}
             target="_blank"
-            className="flex cursor-pointer flex-col items-center justify-center"
+            className="flex cursor-pointer gap-2 flex-col items-center justify-center"
           >
             <div className="flex h-[43px] w-[43px] items-center justify-center rounded-lg bg-[#ffffff14]">
               <Image width={18} height={15} src={telegramIcon} alt="telegram"/>

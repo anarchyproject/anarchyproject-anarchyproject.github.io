@@ -57,22 +57,16 @@ const btcForSingleAC = async () => {
       args: [ONE_AC, totalSupply],
     });
 
-    console.log({btcForOneAC})
-
     return btcForOneAC;
   } catch (e) {
-    console.log({e})
+    console.log(e);
   }
 };
 
 const calcBtcToAc = async (btcAmount) => {
   const BTCForOneAc = await btcForSingleAC();
   const btcRate = ONE_BTC / BTCForOneAc;
-  console.log({btcRate})
-  console.log({btcAmount})
-
   const acAmount = (ONE_BTC / BTCForOneAc) * btcAmount;
-  console.log({acAmount})
   return acAmount;
 };
 
@@ -154,7 +148,6 @@ export const useAcBalance = (address) => {
     functionName: "balanceOf",
     args: [address],
   });
-  console.log(balance)
 
-  return balance ? formatUnits(balance, 8) : 0;
+  return balance ? formatUnits(balance, 4) : 0;
 }

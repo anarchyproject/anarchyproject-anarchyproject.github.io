@@ -1,10 +1,12 @@
+import {ShadowedBorderBlock} from "~/components/shadowed-border-block";
+
 export const Modal = ({children, title, setIsOpen}) => {
 
   return (
     <div
       className="fixed inset-0 z-40 flex items-center justify-center bg-[#333] bg-opacity-50"
     >
-      <div className="bg-[#181818] border border-[#642424] sm:min-w-[575px] relative p-8 pr-10 gap-12 shadow-squareDefault flex flex-col">
+      <ShadowedBorderBlock>
         {title && <span className="font-bios text-white">{title}</span>}
         {children}
         <button
@@ -13,7 +15,7 @@ export const Modal = ({children, title, setIsOpen}) => {
         >
           X
         </button>
-      </div>
+      </ShadowedBorderBlock>
     </div>
   );
 }

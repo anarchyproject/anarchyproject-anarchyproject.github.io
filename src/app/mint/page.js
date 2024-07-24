@@ -67,7 +67,7 @@ function MintErrorModal({state, setState}) {
 const shortenHash = (hash) => hash?.slice(0, 6) + '...' + hash?.slice(-6);
 
 function MintSuccessModal({state, setState}) {
-  if (state !== 'success') {
+  if (state.status !== 'success') {
     return null;
   }
 

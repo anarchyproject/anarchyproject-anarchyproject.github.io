@@ -141,7 +141,7 @@ export default function Mint() {
           </Block>
           <Block icon={<Icon path="/icons/AC.svg"/>} title="Total AC Minted">
             <span
-              className="font-bios text-[#cc6600] xl:text-[28px]">{totalSupply ? formatUnits(totalSupply, 4) : 0}</span>
+              className="font-bios text-[#cc6600] xl:text-[28px]">{totalSupply ? formatUnits(totalSupply, 8) : 0}</span>
           </Block>
         </div>
         <Block

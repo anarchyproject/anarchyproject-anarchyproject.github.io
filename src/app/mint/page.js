@@ -90,7 +90,7 @@ function MintSuccessModal({state, setState}) {
         </div>
         <div className="flex justify-between w-full">
           <div className="text-[#00aa00]">Confirmed</div>
-          <div className="text-[#00aa00]">{shortenHash(state?.payload?.txHash)}</div>
+          <div className="text-[#00aa00]">{shortenHash(state?.payload?.hash)}</div>
         </div>
         <div className="flex items-center justify-center gap-8">
           <a

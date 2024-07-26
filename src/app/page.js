@@ -29,7 +29,7 @@ export default function Home() {
         />
       </div>
 
-      <div className="flex flex-col gap-8 px-5 md:px-10 lg:px-20 xl:gap-20 xl:px-[120px]">
+      <div className="flex flex-col relative gap-8 px-5 md:px-10 lg:px-20 xl:gap-20 xl:px-[120px]">
         <BlockWithTitle title="TL;TD" primaryColor="#AA0000" bgColor="#181818">
           <div className="flex flex-col gap-5 text-xl">
             <div className="flex gap-5">
@@ -52,9 +52,14 @@ export default function Home() {
                 Double benefit! Burn BTC to support scarcity and earn from AC&apos;s rise
               </p>
             </div>
-            {/*<h1 className="absolute bottom-[-15%] sm:bottom-[-20%] lg:bottom-[-13%] left-1/4 mx-auto my-4 flex justify-center">*/}
-            {/*  <WarningBlock>! MINT ANARCHY COIN !</WarningBlock>*/}
-            {/*</h1>*/}
+          </div>
+          <div className="absolute bottom-[-20px] right-0 left-0 flex text-white w-full items-center justify-center gap-4">
+            <a href="x.com/@burnbtcmintac"
+               className="font-bios p-2 w-[160px] text-sm sm:w-[216px] shadow-squareDefault text-center bg-red-bg uppercase sm:text-xl">[
+              X ]</a>
+            <a href="t.me/@burnbtcmintac"
+               className="font-bios p-2 w-[160px] text-sm sm:w-[216px] shadow-squareDefault text-center bg-red-bg uppercase sm:text-xl">[
+              TELEGRAM ]</a>
           </div>
         </BlockWithTitle>
         <div className="md:h-12 lg:h-0"/>

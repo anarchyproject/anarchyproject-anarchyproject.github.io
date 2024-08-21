@@ -54,10 +54,10 @@ export default function Home() {
             </div>
           </div>
           <div className="absolute bottom-[-20px] right-0 left-0 flex text-white w-full items-center justify-center gap-4">
-            <a href="x.com/@burnbtcmintac"
+            <a href="https://x.com/burnbtcmintac"
                className="font-bios p-2 w-[160px] text-sm sm:w-[216px] shadow-squareDefault text-center bg-red-bg uppercase sm:text-xl">[
               X ]</a>
-            <a href="t.me/@burnbtcmintac"
+            <a href="https://t.me/AnarchyCoin"
                className="font-bios p-2 w-[160px] text-sm sm:w-[216px] shadow-squareDefault text-center bg-red-bg uppercase sm:text-xl">[
               TELEGRAM ]</a>
           </div>

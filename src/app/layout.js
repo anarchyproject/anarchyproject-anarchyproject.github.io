@@ -7,7 +7,7 @@ import {DynamicText} from "~/components/dynamic-text";
 import { WagmiProvider } from 'wagmi';
 import { config } from '../config';
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-
+import { GoogleTagManager } from '@next/third-parties/google'
 
 const biosFont = localFont({
   src: '/fonts/Ac437_DTK_BIOS.ttf',
@@ -36,22 +36,24 @@ const sansFontWeb = localFont({
 const queryClient = new QueryClient();
 
 export default function RootLayout({ children }) {
+
   return (
     <html className={`${sansFont.variable} ${sansFontWeb.variable} ${biosFont.variable} ${biosFontWeb.variable} font-sans`}>
-      <body>
-      <WagmiProvider config={config}>
-        <QueryClientProvider client={queryClient}>
+    <body>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
         <div className="flex w-full flex-col justify-center gap-8">
-          <Header />
+          <Header/>
           {children}
           <div className="px-5 md:px-10 lg:px-20 xl:gap-20 xl:px-[120px]">
-            <DynamicText text="Join the freedom movement. MINT Anarchy Coin. Burn Bitcoin." />
-            <Footer />
+            <DynamicText text="Join the freedom movement. MINT Anarchy Coin. Burn Bitcoin."/>
+            <Footer/>
           </div>
         </div>
-        </QueryClientProvider>
-      </WagmiProvider>
-      </body>
+      </QueryClientProvider>
+    </WagmiProvider>
+    </body>
+    <GoogleTagManager gtmId="G-57D0MRREGC" />
     </html>
   );
 }

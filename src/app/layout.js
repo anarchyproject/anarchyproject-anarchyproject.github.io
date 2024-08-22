@@ -5,9 +5,10 @@ import localFont from "next/font/local";
 import {Footer} from "~/components/footer";
 import {DynamicText} from "~/components/dynamic-text";
 import { WagmiProvider } from 'wagmi';
-import { config } from '../config';
+import { config } from '~/config';
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-import { GoogleTagManager } from '@next/third-parties/google'
+import { GoogleTagManager, sendGTMEvent } from '@next/third-parties/google'
+import {useEffect} from "react";
 
 const biosFont = localFont({
   src: '/fonts/Ac437_DTK_BIOS.ttf',
@@ -36,6 +37,9 @@ const sansFontWeb = localFont({
 const queryClient = new QueryClient();
 
 export default function RootLayout({ children }) {
+  useEffect(() => {
+    sendGTMEvent({ event: 'js', value: new Date() });
+  }, []);
 
   return (
     <html className={`${sansFont.variable} ${sansFontWeb.variable} ${biosFont.variable} ${biosFontWeb.variable} font-sans`}>

@@ -9,6 +9,7 @@ import { config } from '~/config';
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import { GoogleTagManager, sendGTMEvent } from '@next/third-parties/google'
 import {useEffect} from "react";
+import {GTM} from "~/components/gtm";
 
 const biosFont = localFont({
   src: '/fonts/Ac437_DTK_BIOS.ttf',
@@ -43,6 +44,7 @@ export default function RootLayout({ children }) {
 
   return (
     <html className={`${sansFont.variable} ${sansFontWeb.variable} ${biosFont.variable} ${biosFontWeb.variable} font-sans`}>
+    <GTM />
     <body>
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
@@ -57,7 +59,6 @@ export default function RootLayout({ children }) {
       </QueryClientProvider>
     </WagmiProvider>
     </body>
-    <GoogleTagManager gtmId="G-57D0MRREGC" />
     </html>
   );
 }

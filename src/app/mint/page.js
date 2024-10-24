@@ -5,7 +5,6 @@ import {useState} from "react";
 import {formatUnits, parseUnits} from "viem";
 import {ConnectOrAccountButton} from "~/components/wallet-connect-acc-btn";
 import {Modal} from "~/components/modal";
-import {ShadowedBorderBlock} from "~/components/shadowed-border-block";
 import Image from 'next/image';
 
 const telegramIcon = '/icon-telegram.svg';
@@ -127,7 +126,7 @@ export default function Mint() {
   const {data: totalSupply} = useTotalSupply();
   const {data: withdrawAmount} = useCalcWithdrawAmount(parseUnits(btcAmount, 4));
   const [mintState, setMintState] = useState({status: 'idle'});
-  const {mintXAC} = useMintXAC(parseUnits(btcAmount, 4), setMintState);
+  const {mintXAC} = useMintXAC(btcAmount, setMintState);
   const {data: btcBurned} = useGetTotalBtcBurned();
 
   return (

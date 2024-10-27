@@ -1,11 +1,12 @@
 "use client";
 
-import {useCalcWithdrawAmount, useGetTotalBtcBurned, useMintXAC, useTotalSupply} from "~/app/mint/hooks";
+import {useCalcACToMint, useGetTotalBtcBurned, useMintXAC, useTotalSupply} from "~/app/mint/hooks";
 import {useState} from "react";
 import {formatUnits, parseUnits} from "viem";
 import {ConnectOrAccountButton} from "~/components/wallet-connect-acc-btn";
 import {Modal} from "~/components/modal";
 import Image from 'next/image';
+import {TBTC} from "~/app/mint/units";
 
 const telegramIcon = '/icon-telegram.svg';
 const twitterIcon = '/icon-twitter.svg';
@@ -122,11 +123,11 @@ function MintSuccessModal({state, setState}) {
 }
 
 export default function Mint() {
-  const [btcAmount, setBtcAmount] = useState("0.0001");
+  const [btcAmount, setBtcAmount] = useState("0.000000001");
   const {data: totalSupply} = useTotalSupply();
-  const {data: withdrawAmount} = useCalcWithdrawAmount(parseUnits(btcAmount, 4));
+  const {data: acToMint} = useCalcACToMint(new TBTC(btcAmount));
   const [mintState, setMintState] = useState({status: 'idle'});
-  const {mintXAC} = useMintXAC(btcAmount, setMintState);
+  const {mintXAC} = useMintXAC(new TBTC(btcAmount), setMintState);
   const {data: btcBurned} = useGetTotalBtcBurned();
 
   return (
@@ -168,7 +169,7 @@ export default function Mint() {
               <span>To mint</span>
               <div className="flex gap-6 pl-2 text-[#00AA00]">
                 <span>AC</span>
-                <span>{(withdrawAmount && formatUnits(withdrawAmount, 8)) || 0}</span>
+                <span>{acToMint ? formatUnits(acToMint, 4) : 0}</span>
               </div>
             </div>
             <button

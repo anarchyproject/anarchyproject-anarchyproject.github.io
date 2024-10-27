@@ -1,26 +1,20 @@
-import {
-  useAccount,
-  useContractRead,
-  useContractWrite,
-  useSignMessage,
-  useSignTypedData,
-  useTransactionCount
-} from "wagmi";
-import {readContract, waitForTransactionReceipt, writeContract, signTypedData} from '@wagmi/core';
+import {useAccount, useContractRead, useTransactionCount} from "wagmi";
+import {readContract, signTypedData, writeContract} from '@wagmi/core';
 
 import xACAbi from "./xAC.abi.json";
-import xBTCAbi from "./xBTC.abi.json";
 import tBTCAbi from "./tBTC.abi.json";
-import {formatEther, formatUnits, parseEther, parseUnits} from "viem";
+import {formatUnits, parseUnits} from "viem";
 import {config} from "~/config";
 import {useQuery} from "wagmi/query";
 import {holesky} from "wagmi/chains";
+import {TBTC, XAC} from "~/app/mint/units";
 
 const xACContract = "0x36dA7c955F4895DB8837401E5d4f5CBBc24d614F";
-const xBTCContract = "0x2d44161d68ac8ebccf7beb59fb84cbfe87abba9a";
-const tBTCContract = "0xD491a0BCd98f331d51c86826e25310d765FbAc4c";
-const ONE_AC = parseUnits('1', 4);
-const ONE_BTC = parseUnits('1', 18);
+const tBTCContract = "0x2D44161D68Ac8eBccF7Beb59FB84cBfE87Abba9A";
+
+
+const oneAc = new XAC('1');
+const oneTBtc = new TBTC('1');
 
 function splitSignature(signature) {
   // Проверяем, что подпись имеет правильную длину
@@ -38,7 +32,7 @@ function splitSignature(signature) {
   const s = "0x" + signature.slice(64, 128);
   const v = parseInt(signature.slice(128, 130), 16);
 
-  return { r, s, v };
+  return {r, s, v};
 }
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -76,60 +70,71 @@ const getTotalSupply = async () => {
 
 const btcForSingleAC = async () => {
   const totalSupply = await getTotalSupply();
-  console.log({totalSupply})
+  const btcForOneACContractResult = await readContract(config, {
+    address: xACContract,
+    abi: xACAbi,
+    functionName: "calcWithdrawAmount",
+    args: [oneAc.uint256Amount, totalSupply, 18],
+  });
 
-  try {
-
-    const btcForOneAC = await readContract(config, {
-      address: xACContract,
-      abi: xACAbi,
-      functionName: "calcWithdrawAmount",
-      args: [ONE_AC, totalSupply, 18],
-    });
-
-    console.log({btcForOneAC})
-
-    return btcForOneAC;
-  } catch (e) {
-    console.log(e);
-  }
+  return btcForOneACContractResult;
 };
 
 const calcBtcToAc = async (btcAmount) => {
-  const BTCForOneAc = await btcForSingleAC();
-  const btcRate = ONE_BTC / BTCForOneAc;
-  const acAmount = (ONE_BTC / BTCForOneAc) * btcAmount;
-  return acAmount;
+  const amountOfAcForOneTBTC = await btcForSingleAC();
+
+  const acAmount = (oneTBtc.uint256Amount / (amountOfAcForOneTBTC)) * btcAmount.uint256Amount;
+
+  return acAmount / 1_000_000_000_000_00n;
 };
 
-export function useCalcWithdrawAmount(amount = parseUnits("1", 8)) {
+export function useCalcACToMint(amount = oneTBtc) {
   return useQuery({
-    queryKey: ["calcWithdrawAmount", formatUnits(amount, 8)],
+    queryKey: ["calcWithdrawAmount", amount.stringAmount],
     queryFn: () => calcBtcToAc(amount),
   });
 }
 
-export function useMintXAC(btcAmount = '1', setMintState) {
-  const {address} = useAccount();
-  const {data: nonce } = useTransactionCount({ address })
+export async function calcWithdrawAmountFromTBTC(btcAmount) {
+  const acAmount = await calcBtcToAc(btcAmount);
 
-  const totalSupply = useTotalSupply();
+  return acAmount;
+}
+
+export async function getWithdrawAmount(acAmount) {
+  const totalSupply = await getTotalSupply();
+  const withdrawAmount = await readContract(config, {
+    address: xACContract,
+    abi: xACAbi,
+    functionName: "calcWithdrawAmount",
+    args: [acAmount, totalSupply, 18],
+  });
+  return withdrawAmount;
+}
+
+export async function getTBTCName() {
+  const name = await readContract(config, {
+    address: tBTCContract,
+    abi: tBTCAbi,
+    functionName: "name",
+    args: [],
+  });
+  return name;
+}
+
+export function useMintXAC(btcAmount = new TBTC('1'), setMintState) {
+  const {address} = useAccount();
+  const {data: nonce} = useTransactionCount({address})
 
   const chainId = holesky.id;
-  const parseBtcAmount = parseUnits(btcAmount, 18)
-  const {data: withdrawAmount} = useCalcWithdrawAmount(parseBtcAmount);
 
   const mintXAC = async () => {
     try {
+      const acAmountWanted = await calcWithdrawAmountFromTBTC(btcAmount);
+      const btcAmountToWithdraw = await getWithdrawAmount(acAmountWanted);
+
       setMintState({status: 'waitingApproval'});
       const deadline = BigInt(Math.floor(Date.now() / 1000) + 3600);
-      // const btcName = await readContract(config, {
-      //   address: tBTCContract,
-      //   abi: tBTCAbi,
-      //   functionName: "name",
-      // });
-      console.log({deadline})
-      // console.log({btcName})
 
       const types = {
         Permit: [
@@ -142,21 +147,22 @@ export function useMintXAC(btcAmount = '1', setMintState) {
       };
 
       const value = {
-        owner: tBTCContract,
-        spender: address,
-        value: parseInt(btcAmount, 10),
+        owner: address,
+        spender: xACContract,
+        value: btcAmountToWithdraw,
         nonce: nonce,
         deadline: deadline,
       };
 
+      const tbtcName = await getTBTCName();
+
       const domain = {
-        name: 'tBTC',
+        name: tbtcName,
         version: "1",
         chainId: chainId,
         verifyingContract: tBTCContract,
       };
 
-      console.log({domain});
       const signature = await signTypedData(config,
         {
           account: address,
@@ -165,16 +171,13 @@ export function useMintXAC(btcAmount = '1', setMintState) {
           types,
           message: value,
         });
-      console.log({ signature });
       const sign = splitSignature(signature);
-      console.log({sign})
-      console.log([deadline, sign.v, sign.r, sign.s, address, parseBtcAmount])
 
       const mintRes = await writeContract(config, {
         address: xACContract,
         abi: xACAbi,
         functionName: "mintWithTBTC",
-        args: [deadline, sign.v, sign.r, sign.s, address, parseBtcAmount],
+        args: [deadline, sign.v, sign.r, sign.s, address, acAmountWanted],
       })
       console.log({mintRes})
     } catch (e) {
@@ -185,16 +188,6 @@ export function useMintXAC(btcAmount = '1', setMintState) {
   };
 
   return {mintXAC};
-}
-
-export const useGetMYBTCAmount = () => {
-  const address = useAccount().address;
-  return useContractRead({
-    address: xBTCContract,
-    abi: xBTCAbi,
-    functionName: "balanceOf",
-    args: [address],
-  })
 }
 
 export const useAcBalance = (address) => {

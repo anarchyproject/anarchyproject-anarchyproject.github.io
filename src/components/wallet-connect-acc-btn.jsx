@@ -17,7 +17,7 @@ export function Account() {
 
   return (
     <div className="flex font-bios" ref={ref}>
-      <div className="flex justify-center items-center p-3">{balance}</div>
+      <div className="flex justify-center items-center p-3">Balance: {balance}</div>
       <div
         onClick={() => setIsOpen(true)}
         className="flex relative justify-center items-center p-3 bg-[#00aa00]"

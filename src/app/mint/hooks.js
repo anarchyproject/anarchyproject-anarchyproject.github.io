@@ -1,5 +1,5 @@
 import {useAccount, useContractRead, useTransactionCount} from "wagmi";
-import {readContract, signTypedData, writeContract} from '@wagmi/core';
+import {readContract, signTypedData, waitForTransactionReceipt, writeContract} from '@wagmi/core';
 
 import xACAbi from "./xAC.abi.json";
 import tBTCAbi from "./tBTC.abi.json";
@@ -172,6 +172,7 @@ export function useMintXAC(btcAmount = new TBTC('1'), setMintState) {
           message: value,
         });
       const sign = splitSignature(signature);
+      setMintState({ status: 'waitingMint' });
 
       const mintRes = await writeContract(config, {
         address: xACContract,
@@ -179,7 +180,9 @@ export function useMintXAC(btcAmount = new TBTC('1'), setMintState) {
         functionName: "mintWithTBTC",
         args: [deadline, sign.v, sign.r, sign.s, address, acAmountWanted],
       })
-      console.log({mintRes})
+      const res = await waitForTransactionReceipt(config,{ hash: mintRes });
+      setMintState({ status: 'success', payload: { hash: mintRes, amount: formatUnits(acAmountWanted, 8) } });
+      return mintRes;
     } catch (e) {
       setMintState({status: 'error', payload: {message: e?.details || e?.message}});
       console.log(e?.details || e?.message);

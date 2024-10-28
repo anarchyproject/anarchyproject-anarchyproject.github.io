@@ -139,7 +139,7 @@ export default function Mint() {
       <div className="flex flex-col justify-center gap-12 p-5 text-white md:flex-row">
         <div className="flex flex-col bg-[#181818] justify-between gap-12">
           <Block icon={<Icon path="/icons/BTC.svg"/>} title="Total BTC Burnt">
-            <span className="font-bios text-[#cc6600] xl:text-[28px]">{formatUnits(btcBurned || BigInt(0), 4)}</span>
+            <span className="font-bios text-[#cc6600] xl:text-[28px]">{formatUnits(btcBurned|| BigInt(0), 18)}</span>
           </Block>
           <Block icon={<Icon path="/icons/AC.svg"/>} title="Total AC Minted">
             <span

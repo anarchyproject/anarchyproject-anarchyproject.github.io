@@ -1,12 +1,19 @@
 "use client";
 
-import {useCalcACToMint, useGetTotalBtcBurned, useMintXAC, useTotalSupply} from "~/app/mint/hooks";
+import {
+  mintXAC,
+  useGetTotalBtcBurned,
+  useMintXAC,
+  useMintXACWBTC,
+  useTotalSupply,
+  useWithdrawAmount
+} from "~/app/mint/hooks";
 import {useState} from "react";
 import {formatUnits, parseUnits} from "viem";
 import {ConnectOrAccountButton} from "~/components/wallet-connect-acc-btn";
 import {Modal} from "~/components/modal";
 import Image from 'next/image';
-import {TBTC} from "~/app/mint/units";
+import {useAccount} from "wagmi";
 
 const telegramIcon = '/icon-telegram.svg';
 const twitterIcon = '/icon-twitter.svg';
@@ -60,7 +67,7 @@ function MintErrorModal({state, setState}) {
         <div
           className="m-4 h-[48px] w-[48px] animate-spin self-center rounded-full border-[2px] border-[#f3f3f3] border-t-[gray] bg-[50%]"></div>
         <div className="font-bold my-5">Error</div>
-        <div className="max-w-[460px] text-[#aa0000] font-bios text-center">{state?.payload?.message}</div>
+        <div className="max-w-[460px] text-wrap break-words text-[#aa0000] font-bios text-center">{state?.payload?.message}</div>
       </div>
     </Modal>
   );
@@ -116,19 +123,25 @@ function MintSuccessModal({state, setState}) {
             <p className="text-[#ffffff80]">Telegram</p>
           </a>
         </div>
-        <button className="font-bios mt-4 bg-red-bg w-full p-4">MINT MORE</button>
+        <button className="font-bios mt-4 bg-red-bg w-full p-4" onClick={() => setState({status: 'idle'})}>MINT MORE
+        </button>
       </div>
     </Modal>
   );
 }
 
 export default function Mint() {
-  const [btcAmount, setBtcAmount] = useState("0.000000001");
+  const [btcType, setBtcType] = useState("tBTC");
+  const [acToMint, setACToMint] = useState("1");
   const {data: totalSupply} = useTotalSupply();
-  const {data: acToMint} = useCalcACToMint(new TBTC(btcAmount));
+  const btcDecimals = btcType === "tBTC" ? 18 : 8;
+  const address = useAccount()?.address;
+
   const [mintState, setMintState] = useState({status: 'idle'});
-  const {mintXAC} = useMintXAC(new TBTC(btcAmount), setMintState);
+  const mintXACWithTBTC = () => mintXAC(address, parseUnits(acToMint, 4), setMintState);
+  const {mintXACWithXBTC} = useMintXACWBTC(parseUnits(acToMint, 4), setMintState);
   const {data: btcBurned} = useGetTotalBtcBurned();
+  const {data: withdrawAmount} = useWithdrawAmount(acToMint, btcDecimals);
 
   return (
     <div className="flex flex-col text-white bg-mint">
@@ -139,43 +152,53 @@ export default function Mint() {
       <div className="flex flex-col justify-center gap-12 p-5 text-white md:flex-row">
         <div className="flex flex-col bg-[#181818] justify-between gap-12">
           <Block icon={<Icon path="/icons/BTC.svg"/>} title="Total BTC Burnt">
-            <span className="font-bios text-[#cc6600] xl:text-[28px]">{formatUnits(btcBurned|| BigInt(0), 18)}</span>
+            <span className="font-bios text-[#cc6600] xl:text-[28px]">{formatUnits(btcBurned || BigInt(0), 18)}</span>
           </Block>
           <Block icon={<Icon path="/icons/AC.svg"/>} title="Total AC Minted">
             <span
-              className="font-bios text-[#cc6600] xl:text-[28px]">{totalSupply ? formatUnits(totalSupply, 8) : 0}</span>
+              className="font-bios text-[#cc6600] xl:text-[28px]">{totalSupply ? formatUnits(totalSupply, 4) : 0}</span>
           </Block>
         </div>
         <Block
-          title="I'm gonna burn my BTC"
+          title="I want to mint AC"
           icon={<Icon path="/icons/burn.svg"/>}
         >
           <div className="flex flex-col gap-6 font-bios xl:h-full">
             <div className="flex flex-col gap-4">
-              <div className="font-sans text-xs text-[#ffffff59]">Insert the amount you’d like to burn.</div>
+              <div className="font-sans text-xs text-[#ffffff59]">Insert the amount you’d like to mint.</div>
               <div className="relative w-full">
                 <p className="absolute left-2 top-1/2 z-10 -translate-y-1/2 transform font-bios text-white">
-                  BTC
+                  AC
                 </p>
                 <input
                   type="number"
-                  value={btcAmount}
-                  onChange={(e) => setBtcAmount(e.target.value)}
+                  value={acToMint}
+                  onChange={(e) => setACToMint(e.target.value)}
                   className="h-[52px] w-full bg-[#272829] p-4 pl-[72px] text-base text-white"
                 />
               </div>
             </div>
             <div className="flex flex-col gap-4">
-              <span>To mint</span>
+              <div className="flex gap-2 items-center justify-center">
+                <span>And ready to burn BTC</span>
+                <select
+                  value={btcType}
+                  onChange={(e) => setBtcType(e.target.value)}
+                  className="h-[52px] bg-[#272829] p-1 text-base text-white"
+                >
+                  <option value="tBTC">tBTC</option>
+                  <option value="wBTC">wBTC</option>
+                </select>
+              </div>
               <div className="flex gap-6 pl-2 text-[#00AA00]">
-                <span>AC</span>
-                <span>{acToMint ? formatUnits(acToMint, 4) : 0}</span>
+                <span>BTC</span>
+                <span>{withdrawAmount ? formatUnits(withdrawAmount, btcDecimals) : 0}</span>
               </div>
             </div>
             <button
               type="button"
               className="rounded-sm bg-red-bg py-2 font-bios text-lg uppercase xl:h-[60px] xl:justify-self-end"
-              onClick={mintXAC}
+              onClick={btcType === "tBTC" ? mintXACWithTBTC : mintXACWithXBTC}
             >
               Burn BTC
             </button>

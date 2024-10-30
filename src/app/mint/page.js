@@ -148,7 +148,7 @@ export default function Mint() {
       <MintWaitingModal state={mintState} setState={setMintState}/>
       <MintSuccessModal state={mintState} setState={setMintState}/>
       <MintErrorModal state={mintState} setState={setMintState}/>
-      <ConnectOrAccountButton/>
+
       <div className="flex flex-col justify-center gap-12 p-5 text-white md:flex-row">
         <div className="flex flex-col bg-[#181818] justify-between gap-12">
           <Block icon={<Icon path="/icons/BTC.svg"/>} title="Total BTC Burnt">
@@ -160,8 +160,8 @@ export default function Mint() {
           </Block>
         </div>
         <Block
-          title="I want to mint AC"
-          icon={<Icon path="/icons/burn.svg"/>}
+          title="I'm Gonna Mint AC"
+          icon={<Icon path="/icons/ac_mint.svg"/>}
         >
           <div className="flex flex-col gap-6 font-bios xl:h-full">
             <div className="flex flex-col gap-4">
@@ -179,25 +179,26 @@ export default function Mint() {
               </div>
             </div>
             <div className="flex flex-col gap-4">
-              <div className="flex gap-2 items-center justify-center">
-                <span>And ready to burn BTC</span>
+              <div className="flex gap-2 items-center">
+                <span>And ready to burn </span>
                 <select
                   value={btcType}
                   onChange={(e) => setBtcType(e.target.value)}
                   className="h-[52px] bg-[#272829] p-1 text-base text-white"
                 >
-                  <option value="tBTC">tBTC</option>
-                  <option value="wBTC">wBTC</option>
+                  <option value="tBTC">{btcType === "tBTC" ? "✓tBTC" : "tBTC"}</option>
+                  <option value="wBTC">{btcType === "wBTC" ? "✓wBTC" : "wBTC"}</option>
                 </select>
               </div>
-              <div className="flex gap-6 pl-2 text-[#00AA00]">
+              <div className="flex gap-6 text-[#00AA00]">
                 <span>BTC</span>
-                <span>{withdrawAmount ? formatUnits(withdrawAmount, btcDecimals) : 0}</span>
+                <span className="pl-2">{withdrawAmount ? formatUnits(withdrawAmount, btcDecimals) : 0}</span>
               </div>
             </div>
             <button
+              disabled={withdrawAmount <= 0}
               type="button"
-              className="rounded-sm bg-red-bg py-2 font-bios text-lg uppercase xl:h-[60px] xl:justify-self-end"
+              className="rounded-sm bg-red-bg py-2 font-bios text-lg uppercase xl:h-[60px] xl:justify-self-end disabled:bg-[#272829] disabled:cursor-not-allowed"
               onClick={btcType === "tBTC" ? mintXACWithTBTC : mintXACWithXBTC}
             >
               Burn BTC

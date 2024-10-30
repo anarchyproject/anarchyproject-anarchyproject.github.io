@@ -7,7 +7,7 @@ import {formatUnits, parseUnits} from "viem";
 import {config} from "~/config";
 import {useQuery} from "wagmi/query";
 
-const xACContract = "0x36dA7c955F4895DB8837401E5d4f5CBBc24d614F";
+const xACContract = "0x3d0bca3c3126858DEfFE1586E667Eb5cCaEE9B0e";
 const tBTCContract = "0x2D44161D68Ac8eBccF7Beb59FB84cBfE87Abba9A";
 const xBTCContract = '0x77B4E87A28B26DBEc5957E9A599dB93AAC70Ae37';
 
@@ -198,5 +198,5 @@ export const useAcBalance = (address) => {
     args: [address],
   });
 
-  return balance ? formatUnits(balance, 8) : 0;
+  return balance ? formatUnits(balance, 4) : 0;
 }

@@ -1,5 +1,5 @@
 import {useAccount, useConnect, useDisconnect, useEnsAvatar, useEnsName} from "wagmi";
-import {useAcBalance} from "~/app/mint/hooks";
+import {useAcBalance, useTBTCBalance} from "~/app/mint/hooks";
 import {useRef, useState} from "react";
 import {Modal} from "~/components/modal";
 import useOnClickOutside from "~/hooks/use-click-outside";
@@ -16,8 +16,8 @@ export function Account() {
   useOnClickOutside(ref, () => setIsOpen(false));
 
   return (
-    <div className="flex font-bios" ref={ref}>
-      <div className="flex justify-center items-center p-3">Balance: {balance}</div>
+    <div className="flex font-bios items-center justify-center" ref={ref}>
+      <div className="flex justify-center items-center p-3">{balance || 0} AC</div>
       <div
         onClick={() => setIsOpen(true)}
         className="flex relative justify-center items-center p-3 bg-[#00aa00]"

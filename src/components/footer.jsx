@@ -1,9 +1,11 @@
 import Image from "next/image";
+import {usePathname} from "next/navigation";
 
 const NEXT_PUBLIC_HIDE = process.env.NEXT_PUBLIC_HIDE;
 
 export function Footer() {
-  if (NEXT_PUBLIC_HIDE === 'true') {
+  const pathname = usePathname();
+  if (NEXT_PUBLIC_HIDE === 'true' && pathname !== '/mint') {
     return null;
   }
 

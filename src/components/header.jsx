@@ -20,7 +20,8 @@ function NavLink(href, text) {
 }
 
 export function Header() {
-  if (NEXT_PUBLIC_HIDE === 'true') {
+  const pathname = usePathname();
+  if (NEXT_PUBLIC_HIDE === 'true' && pathname !== '/mint') {
     return null;
   }
   return (

@@ -1,4 +1,4 @@
-import {useAccount, useContractRead, useTransactionCount} from "wagmi";
+import {useAccount, useContractRead} from "wagmi";
 import {readContract, getTransactionCount, signTypedData, waitForTransactionReceipt, writeContract} from '@wagmi/core';
 import xACAbi from "./xAC.abi.json";
 import tBTCAbi from "./tBTC.abi.json";

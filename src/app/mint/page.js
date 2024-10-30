@@ -13,7 +13,7 @@ import {formatUnits, parseUnits} from "viem";
 import {ConnectOrAccountButton} from "~/components/wallet-connect-acc-btn";
 import {Modal} from "~/components/modal";
 import Image from 'next/image';
-import {useAccount} from "wagmi";
+import {useAccount, useTransactionCount} from "wagmi";
 
 const telegramIcon = '/icon-telegram.svg';
 const twitterIcon = '/icon-twitter.svg';
@@ -138,7 +138,11 @@ export default function Mint() {
   const address = useAccount()?.address;
 
   const [mintState, setMintState] = useState({status: 'idle'});
-  const mintXACWithTBTC = () => mintXAC(address, parseUnits(acToMint, 4), setMintState);
+
+  const {data: nonce} = useTransactionCount({address});
+
+  const mintXACWithTBTC = () => mintXAC(address, nonce, parseUnits(acToMint, 4), setMintState);
+
   const {mintXACWithXBTC} = useMintXACWBTC(parseUnits(acToMint, 4), setMintState);
   const {data: btcBurned} = useGetTotalBtcBurned();
   const {data: withdrawAmount} = useWithdrawAmount(acToMint, btcDecimals);

@@ -148,7 +148,7 @@ export default function Mint() {
   const {data: withdrawAmount} = useWithdrawAmount(acToMint, btcDecimals);
 
   return (
-    <div className="flex flex-col text-white bg-mint">
+    <div className="flex flex-col p-8 text-white bg-mint" style={{ backgroundImage: "url('/bg_1440.png')", backgroundRepeat: 'no-repeat', backgroundSize: '100% 100%', backgroundPositionX: "center"}}>
       <MintWaitingModal state={mintState} setState={setMintState}/>
       <MintSuccessModal state={mintState} setState={setMintState}/>
       <MintErrorModal state={mintState} setState={setMintState}/>

@@ -7,7 +7,8 @@ import {DynamicText} from "~/components/dynamic-text";
 import { WagmiProvider } from 'wagmi';
 import { config } from '~/config';
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-import { GoogleTagManager, sendGTMEvent } from '@next/third-parties/google'
+import { sendGTMEvent } from '@next/third-parties/google'
+import Image from "next/image";
 import {useEffect} from "react";
 import {GTM} from "~/components/gtm";
 
@@ -48,7 +49,7 @@ export default function RootLayout({ children }) {
     <body>
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <div className="flex w-full flex-col justify-center gap-8">
+        <div className="flex w-full flex-col justify-center">
           <Header/>
           {children}
           <div className="px-5 md:px-10 lg:px-20 xl:gap-20 xl:px-[120px]">

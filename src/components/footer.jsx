@@ -16,6 +16,10 @@ export function Footer() {
           <Image width={24} height={24} src="/icons/Discord.svg" alt="discord"/>
         </a>
 
+        <a href="https://t.me/AnarchyCoin" target="_blank">
+          <Image src={"/icon-telegram.svg"} alt="tg" width={24} height={24} />
+        </a>
+
         <a href="https://x.com/burnbtcmintac" target="_blank">
           <Image width={24} height={24} src="/icons/Twitter.svg" alt="twitter"/>
         </a>

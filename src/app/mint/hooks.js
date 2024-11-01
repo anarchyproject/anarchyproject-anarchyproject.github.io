@@ -127,6 +127,10 @@ export function useMintXACWBTC(acToMint, setMintState) {
 
 
 export const mintXAC = async (address, acToMint, setMintState, addToNonce = 0) => {
+  if (Math.abs(addToNonce) > 2) {
+    setMintState({status: 'error', payload: {message: "Nonce overflow; Probably too many pending transactions" }});
+    return;
+  }
   try {
     const btcAmountToWithdraw = await getWithdrawAmount(acToMint, 18);
 

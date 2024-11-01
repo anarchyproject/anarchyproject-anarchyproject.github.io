@@ -71,6 +71,7 @@ function MintErrorModal({state, setState}) {
     </Modal>
   );
 }
+console.log(config.chains[0]);
 
 const shortenHash = (hash) => hash?.slice(0, 6) + '...' + hash?.slice(-6);
 
@@ -98,7 +99,7 @@ function MintSuccessModal({state, setState}) {
         </div>
         <div className="flex justify-between w-full">
           <div className="text-[#00aa00]">Confirmed</div>
-          <a href={`${config.chains[0].blockExplorers?.default[0]}/tx/${state?.payload?.hash}`} className="text-[#00aa00]">{shortenHash(state?.payload?.hash)}</a>
+          <a href={`${config.chains[0].blockExplorers?.default.url}/tx/${state?.payload?.hash}`} className="text-[#00aa00]">{shortenHash(state?.payload?.hash)}</a>
         </div>
         <div className="flex items-center justify-center gap-8">
           <a
@@ -210,7 +211,7 @@ export default function Mint() {
               </div>
             </div>
             <button
-              disabled={withdrawAmount <= 0}
+              disabled={withdrawAmount <= 0 || !isConnected}
               type="button"
               className="rounded-sm bg-red-bg py-2 font-bios text-lg uppercase xl:h-[60px] xl:justify-self-end disabled:bg-[#272829] disabled:cursor-not-allowed"
               onClick={mintClick}

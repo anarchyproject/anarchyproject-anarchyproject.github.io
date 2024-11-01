@@ -126,7 +126,7 @@ export function useMintXACWBTC(acToMint, setMintState) {
 }
 
 
-export const mintXAC = async (address, acToMint, setMintState) => {
+export const mintXAC = async (address, acToMint, setMintState, addToNonce = 0) => {
   try {
     const btcAmountToWithdraw = await getWithdrawAmount(acToMint, 18);
 
@@ -149,7 +149,7 @@ export const mintXAC = async (address, acToMint, setMintState) => {
       owner: address,
       spender: xACContract,
       value: btcAmountToWithdraw,
-      nonce: nonce,
+      nonce: nonce + addToNonce,
       deadline: deadline,
     };
 
@@ -183,6 +183,10 @@ export const mintXAC = async (address, acToMint, setMintState) => {
     setMintState({status: 'success', payload: {hash: mintRes, amount: formatUnits(acToMint, 4)}});
     return mintRes;
   } catch (e) {
+    if (e?.details?.includes('ERC2612InvalidSigner') || e.message?.includes('ERC2612InvalidSigner')) {
+      await mintXAC(address, acToMint, setMintState, -1);
+      return;
+    }
     setMintState({status: 'error', payload: {message: e?.details || e?.message}});
     console.log(e?.details || e?.message);
   }

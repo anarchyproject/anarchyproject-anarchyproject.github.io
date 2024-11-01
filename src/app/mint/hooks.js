@@ -6,6 +6,7 @@ import xBTCAbi from "./xBTC.abi.json";
 import {formatUnits, parseUnits} from "viem";
 import {config} from "~/config";
 import {useQuery} from "wagmi/query";
+import {queryClient} from "~/app/layout";
 
 const xACContract = "0x3d0bca3c3126858DEfFE1586E667Eb5cCaEE9B0e";
 const tBTCContract = "0x2D44161D68Ac8eBccF7Beb59FB84cBfE87Abba9A";
@@ -28,22 +29,17 @@ function splitSignature(signature) {
   return {r, s, v};
 }
 
-
-export const useTotalSupply = () => {
-  return useContractRead({
-    address: xACContract,
-    abi: xACAbi,
-    functionName: "totalSupply",
-    args: [],
-  })
-}
-
 export const useGetTotalBtcBurned = () => {
-  return useContractRead({
+  const getBtcBurned = async () => readContract(config,{
     address: xACContract,
     abi: xACAbi,
     functionName: "btcBurned",
     args: [],
+  });
+
+  return useQuery({
+    queryKey: ["btcBurned"],
+    queryFn: () => getBtcBurned(),
   })
 }
 
@@ -71,6 +67,13 @@ export async function getWithdrawAmount(acAmount, decimals) {
   return withdrawAmount;
 }
 
+export function useGetTotalSupply () {
+  return useQuery({
+    queryKey: ["totalSupply"],
+    queryFn: () => getTotalSupply(),
+  })
+}
+
 export function useWithdrawAmount(acAmount, decimals) {
   return useQuery({
     queryKey: ["calcWithdrawAmount", acAmount.toString(), decimals.toString()],
@@ -86,6 +89,18 @@ export async function getTBTCName() {
     args: [],
   });
   return name;
+}
+
+function resetCounters() {
+  queryClient.invalidateQueries({
+    queryKey: ["balanceOf"],
+  });
+  queryClient.invalidateQueries({
+    queryKey: ["totalSupply"],
+  });
+  queryClient.invalidateQueries({
+    queryKey: ["btcBurned"],
+  });
 }
 
 export function useMintXACWBTC(acToMint, setMintState) {
@@ -115,6 +130,7 @@ export function useMintXACWBTC(acToMint, setMintState) {
       const txRec2 = await waitForTransactionReceipt(config, {hash: mintRes});
 
       setMintState({status: 'success', payload: {hash: mintRes, amount: formatUnits(acToMint, 4)}});
+      resetCounters();
       return txRec2;
     } catch (e) {
       setMintState({status: 'error', payload: {message: e?.details || e?.message}});
@@ -128,7 +144,7 @@ export function useMintXACWBTC(acToMint, setMintState) {
 
 export const mintXAC = async (address, acToMint, setMintState, addToNonce = 0) => {
   if (Math.abs(addToNonce) > 2) {
-    setMintState({status: 'error', payload: {message: "Nonce overflow; Probably too many pending transactions" }});
+    setMintState({status: 'error', payload: {message: "Nonce overflow; Probably too many pending transactions"}});
     return;
   }
   try {
@@ -185,6 +201,7 @@ export const mintXAC = async (address, acToMint, setMintState, addToNonce = 0) =
     })
     await waitForTransactionReceipt(config, {hash: mintRes});
     setMintState({status: 'success', payload: {hash: mintRes, amount: formatUnits(acToMint, 4)}});
+    resetCounters();
     return mintRes;
   } catch (e) {
     if (e?.details?.includes('ERC2612InvalidSigner') || e.message?.includes('ERC2612InvalidSigner')) {

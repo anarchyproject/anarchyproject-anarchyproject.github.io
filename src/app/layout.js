@@ -36,7 +36,7 @@ const sansFontWeb = localFont({
   }
 );
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 export default function RootLayout({ children }) {
   useEffect(() => {

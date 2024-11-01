@@ -2,7 +2,7 @@
 
 import {
   mintXAC,
-  useGetTotalBtcBurned,
+  useGetTotalBtcBurned, useGetTotalSupply,
   useMintXACWBTC,
   useTotalSupply,
   useWithdrawAmount
@@ -71,7 +71,6 @@ function MintErrorModal({state, setState}) {
     </Modal>
   );
 }
-console.log(config.chains[0]);
 
 const shortenHash = (hash) => hash?.slice(0, 6) + '...' + hash?.slice(-6);
 
@@ -134,7 +133,7 @@ export default function Mint() {
   const [btcType, setBtcType] = useState("tBTC");
   const [acToMint, setACToMint] = useState("1");
   const isConnected = useAccount().isConnected;
-  const {data: totalSupply} = useTotalSupply();
+  const {data: totalSupply} = useGetTotalSupply();
   const btcDecimals = btcType === "tBTC" ? 18 : 8;
   const address = useAccount()?.address;
 

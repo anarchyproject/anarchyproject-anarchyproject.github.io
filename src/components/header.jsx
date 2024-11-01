@@ -30,7 +30,7 @@ export function Header() {
         <div className="grid grid-cols-3 sm:flex">
           {NavLink('/', '[ HOME ]')}
           {NavLink('/mint', '[ MINT ]')}
-          {NavLink('/swap', '[ SWAP ]')}
+          {/*{NavLink('/swap', '[ SWAP ]')}*/}
         </div>
         <div className="flex w-full flex-grow items-center justify-around sm:flex-grow-0 sm:justify-end">
           <ConnectOrAccountButton />

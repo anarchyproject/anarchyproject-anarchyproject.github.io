@@ -16,7 +16,7 @@ export function Footer() {
           <Image width={24} height={24} src="/icons/Discord.svg" alt="discord"/>
         </a>
 
-        <a href="/#" target="_blank">
+        <a href="https://x.com/burnbtcmintac" target="_blank">
           <Image width={24} height={24} src="/icons/Twitter.svg" alt="twitter"/>
         </a>
 
@@ -28,7 +28,7 @@ export function Footer() {
         className="flex flex-col justify-center font-bios text-xs/[22px] text-[#ECECEC] sm:flex-row sm:gap-4 lg:text-sm"
       >
         <span className="text-nowrap">Anarchy Coin. All rights reserved.</span>
-        <a className="text-center" href="mailto:hello@AnarchyCoin.net">hello@AnarchyCoin.net</a>
+        <a className="text-center" href="mailto:burnbtcmintac@gmail.com">burnbtcmintac@gmail.com</a>
       </p>
     </footer>
   );

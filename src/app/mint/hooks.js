@@ -129,8 +129,7 @@ export function useMintXACWBTC(acToMint, setMintState) {
 export const mintXAC = async (address, acToMint, setMintState) => {
   try {
     const btcAmountToWithdraw = await getWithdrawAmount(acToMint, 18);
-    console.log({btcAmountToWithdraw})
-    console.log({acToMint})
+
     setMintState({status: 'waitingApproval'});
     const deadline = BigInt(Math.floor(Date.now() / 1000) + 3600);
 
@@ -145,7 +144,7 @@ export const mintXAC = async (address, acToMint, setMintState) => {
     };
 
     const nonce = await getTransactionCount(config, {address});
-    console.log({nonce})
+
     const value = {
       owner: address,
       spender: xACContract,

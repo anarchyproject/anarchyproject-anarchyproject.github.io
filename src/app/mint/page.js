@@ -3,14 +3,13 @@
 import {
   mintXAC,
   useGetTotalBtcBurned,
-  useMintXAC,
   useMintXACWBTC,
   useTotalSupply,
   useWithdrawAmount
 } from "~/app/mint/hooks";
+import {config} from '~/config';
 import {useState} from "react";
 import {formatUnits, parseUnits} from "viem";
-import {ConnectOrAccountButton} from "~/components/wallet-connect-acc-btn";
 import {Modal} from "~/components/modal";
 import Image from 'next/image';
 import {useAccount, useTransactionCount} from "wagmi";
@@ -99,7 +98,7 @@ function MintSuccessModal({state, setState}) {
         </div>
         <div className="flex justify-between w-full">
           <div className="text-[#00aa00]">Confirmed</div>
-          <div className="text-[#00aa00]">{shortenHash(state?.payload?.hash)}</div>
+          <a href={`${config.chains[0].blockExplorers?.default[0]}/tx/${state?.payload?.hash}`} className="text-[#00aa00]">{shortenHash(state?.payload?.hash)}</a>
         </div>
         <div className="flex items-center justify-center gap-8">
           <a
@@ -133,15 +132,26 @@ function MintSuccessModal({state, setState}) {
 export default function Mint() {
   const [btcType, setBtcType] = useState("tBTC");
   const [acToMint, setACToMint] = useState("1");
+  const isConnected = useAccount().isConnected;
   const {data: totalSupply} = useTotalSupply();
   const btcDecimals = btcType === "tBTC" ? 18 : 8;
   const address = useAccount()?.address;
 
   const [mintState, setMintState] = useState({status: 'idle'});
 
-  const {data: nonce} = useTransactionCount({address});
 
-  const mintXACWithTBTC = () => mintXAC(address, nonce, parseUnits(acToMint, 4), setMintState);
+  const mintClick = () => {
+    if (!isConnected) {
+      // TODO
+    }
+    if (btcType === "tBTC") {
+      mintXACWithTBTC();
+    } else {
+      mintXACWithXBTC();
+    }
+  }
+
+  const mintXACWithTBTC = () => mintXAC(address, parseUnits(acToMint, 4), setMintState);
 
   const {mintXACWithXBTC} = useMintXACWBTC(parseUnits(acToMint, 4), setMintState);
   const {data: btcBurned} = useGetTotalBtcBurned();
@@ -203,7 +213,7 @@ export default function Mint() {
               disabled={withdrawAmount <= 0}
               type="button"
               className="rounded-sm bg-red-bg py-2 font-bios text-lg uppercase xl:h-[60px] xl:justify-self-end disabled:bg-[#272829] disabled:cursor-not-allowed"
-              onClick={btcType === "tBTC" ? mintXACWithTBTC : mintXACWithXBTC}
+              onClick={mintClick}
             >
               Burn BTC
             </button>

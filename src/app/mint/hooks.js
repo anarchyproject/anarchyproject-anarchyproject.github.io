@@ -30,7 +30,7 @@ function splitSignature(signature) {
 }
 
 export const useGetTotalBtcBurned = () => {
-  const getBtcBurned = async () => readContract(config,{
+  const getBtcBurned = async () => readContract(config, {
     address: xACContract,
     abi: xACAbi,
     functionName: "btcBurned",
@@ -67,7 +67,7 @@ export async function getWithdrawAmount(acAmount, decimals) {
   return withdrawAmount;
 }
 
-export function useGetTotalSupply () {
+export function useGetTotalSupply() {
   return useQuery({
     queryKey: ["totalSupply"],
     queryFn: () => getTotalSupply(),
@@ -144,7 +144,7 @@ export function useMintXACWBTC(acToMint, setMintState) {
 
 export const mintXAC = async (address, acToMint, setMintState, addToNonce = 0) => {
   if (Math.abs(addToNonce) > 2) {
-    setMintState({status: 'error', payload: {message: "Nonce overflow; Probably too many pending transactions"}});
+    setMintState({status: 'error', payload: {message: "Invalid Signer; Probably too many pending transactions"}});
     return;
   }
   try {
@@ -163,7 +163,7 @@ export const mintXAC = async (address, acToMint, setMintState, addToNonce = 0) =
       ],
     };
 
-    const nonce = await getTransactionCount(config, {address});
+    const nonce = await getTransactionCount(config, {address, blockTag: 'pending'});
 
     const value = {
       owner: address,
@@ -205,7 +205,7 @@ export const mintXAC = async (address, acToMint, setMintState, addToNonce = 0) =
     return mintRes;
   } catch (e) {
     if (e?.details?.includes('ERC2612InvalidSigner') || e.message?.includes('ERC2612InvalidSigner')) {
-      await mintXAC(address, acToMint, setMintState, -1);
+      await mintXAC(address, acToMint, setMintState, addToNonce - 1);
       return;
     }
     setMintState({status: 'error', payload: {message: e?.details || e?.message}});

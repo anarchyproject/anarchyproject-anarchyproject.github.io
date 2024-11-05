@@ -2,15 +2,12 @@
 const nextConfig = {
   output: "export",
   webpack: config => {
+    config.externals.push('encoding');
     config.resolve.fallback = {
       fs: false,
     };
     return config;
   },
-  transpilePackages: [
-    '@uniswap/widgets',
-    '@uniswap/conedison'
-  ],
   images: {
     unoptimized: true,
   }

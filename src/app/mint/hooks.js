@@ -78,7 +78,8 @@ export function useWithdrawAmount(acAmount, decimals) {
   return useQuery({
     queryKey: ["calcWithdrawAmount", acAmount.toString(), decimals.toString()],
     queryFn: () => getWithdrawAmount(parseUnits(acAmount, 4), decimals),
-  })
+    retry: false,
+  });
 }
 
 export async function getTBTCName() {

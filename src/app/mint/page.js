@@ -155,7 +155,7 @@ export default function Mint() {
 
   const {mintXACWithXBTC} = useMintXACWBTC(parseUnits(acToMint, 4), setMintState);
   const {data: btcBurned} = useGetTotalBtcBurned();
-  const {data: withdrawAmount} = useWithdrawAmount(acToMint, btcDecimals);
+  const {data: withdrawAmount, isLoading: withdrawAmountLoading} = useWithdrawAmount(acToMint, btcDecimals);
 
   return (
     <div className="flex flex-col p-8 text-white bg-mint" style={{ backgroundImage: "url('/bg_1440.png')", backgroundRepeat: 'no-repeat', backgroundSize: '100% 100%', backgroundPositionX: "center"}}>
@@ -191,6 +191,7 @@ export default function Mint() {
                   className="h-[52px] w-full bg-[#272829] p-4 pl-[72px] text-base text-white"
                 />
               </div>
+              {acToMint > 0 && !withdrawAmount && !withdrawAmountLoading && <div className="text-[#aa0000] font-bios">You are crazy :)</div>}
             </div>
             <div className="flex flex-col gap-4">
               <div className="flex gap-2 items-center">

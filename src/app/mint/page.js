@@ -130,8 +130,8 @@ function MintSuccessModal({state, setState}) {
 }
 
 export default function Mint() {
-  const [btcType, setBtcType] = useState("tBTC");
-  const [acToMint, setACToMint] = useState("1");
+  const [btcType, setBtcType] = useState("wTBC");
+  const [acToMint, setACToMint] = useState("100");
   const isConnected = useAccount().isConnected;
   const {data: totalSupply} = useGetTotalSupply();
   const btcDecimals = btcType === "tBTC" ? 18 : 8;
@@ -191,19 +191,11 @@ export default function Mint() {
                   className="h-[52px] w-full bg-[#272829] p-4 pl-[72px] text-base text-white"
                 />
               </div>
-              {acToMint > 0 && !withdrawAmount && !withdrawAmountLoading && <div className="text-[#aa0000] font-bios">You are crazy :)</div>}
+              {acToMint > 1 && !withdrawAmount && !withdrawAmountLoading && <div className="text-[#aa0000] font-bios">You are crazy :)</div>}
             </div>
             <div className="flex flex-col gap-4">
               <div className="flex gap-2 items-center">
-                <span>And ready to burn </span>
-                <select
-                  value={btcType}
-                  onChange={(e) => setBtcType(e.target.value)}
-                  className="h-[52px] bg-[#272829] p-1 text-base text-white"
-                >
-                  <option value="tBTC">{btcType === "tBTC" ? "✓tBTC" : "tBTC"}</option>
-                  <option value="wBTC">{btcType === "wBTC" ? "✓wBTC" : "wBTC"}</option>
-                </select>
+                <span>And ready to burn wBTC</span>
               </div>
               <div className="flex gap-6 text-[#00AA00]">
                 <span>BTC</span>

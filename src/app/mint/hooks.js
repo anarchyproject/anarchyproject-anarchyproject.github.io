@@ -8,9 +8,9 @@ import {config} from "~/config";
 import {useQuery} from "wagmi/query";
 import {queryClient} from "~/app/layout";
 
-const xACContract = "0x3d0bca3c3126858DEfFE1586E667Eb5cCaEE9B0e";
-const tBTCContract = "0x2D44161D68Ac8eBccF7Beb59FB84cBfE87Abba9A";
-const xBTCContract = '0x77B4E87A28B26DBEc5957E9A599dB93AAC70Ae37';
+const xACContract = "0xca34bD005065208410873172A3DaDC4deaD5Db7a";
+const tBTCContract = "0xD491a0BCd98f331d51c86826e25310d765FbAc4c";
+const xBTCContract = '0x2d44161d68ac8ebccf7beb59fb84cbfe87abba9a';
 
 
 function splitSignature(signature) {
@@ -79,6 +79,7 @@ export function useWithdrawAmount(acAmount, decimals) {
     queryKey: ["calcWithdrawAmount", acAmount.toString(), decimals.toString()],
     queryFn: () => getWithdrawAmount(parseUnits(acAmount, 4), decimals),
     retry: false,
+    debounce: 500,
   });
 }
 

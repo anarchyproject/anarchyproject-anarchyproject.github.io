@@ -35,7 +35,7 @@ export default function Home() {
             <div className="flex gap-5">
               <p className="text-bios text-xl">1.</p>
               <p className="text-bios">
-                Burn BTC to mint AC!
+                Burn BTC to mint AC!🔥
               </p>
             </div>
             <div className="flex gap-5">
@@ -49,7 +49,7 @@ export default function Home() {
               <p className="text-bios text-xl">3.</p>
 
               <p className="text-bios">
-                Double benefit! Burn BTC to support scarcity and earn from AC&apos;s rise
+                All BTC goes into a special pool. AC dumping is futile!
               </p>
             </div>
           </div>
@@ -81,28 +81,35 @@ export default function Home() {
                 of the remaining painting
               </p>
             </div>
+            <div className="flex gap-2 md:gap-5 xl:gap-8">
+              <Hl text='Q:' color='#aa0000'/>
+              <p className="block-p">
+                Alternatively, would it be more profitable to conceal one painting and then sell both at inflated prices?
+              </p>
+            </div>
+            <div className="flex gap-2 xl:gap-8">
+              <Hl text="A:" color="#00AA00"/>
+              <p className="block-p">
+                Hmm…
+              </p>
+            </div>
           </div>
         </BlockWithTitle>
 
         <BlockWithTitle title="About" primaryColor="#CC6600">
           <div className="flex flex-col gap-6 xl:gap-8">
             <p className="block-p">
-              AC is the token created as a result of the proven burning of Bitcoin. The issuance process
-              may be described as <Hl text="virtual mining," color="#CC6600"/> with Bitcoin playing the role
-              of electricity. The issuance of each <Hl text="new AC requires more BTC" color="#CC6600"/> to be
-              burned than for the previous one.
+              AC is a token created through the virtual burning of Bitcoin.
+              This process is virtual because all BTC are transferred to a special liquidity pool.
+              Each new AC issuance requires more BTC to be burned than the previous one.
             </p>
             <p className="block-p">
-              AC has a finite potential supply, but reaching it would necessitate burning all outstanding
-              BTCs, which is not practically feasible. AC derives its value from the value of burned
-              Bitcoin, similar to how Bitcoin derives its value from the cost of the electricity necessary
-              to mine it,
-              <Hl text=" similar to how Gold derives its value from the cost of mining." color="#CC6600"/>
+              AC has a finite potential supply.
+              Reaching this supply would require either burning all outstanding BTCs or utilizing BTC from the special liquidity pool, which would drive up AC&apos;s price.
             </p>
             <p className="block-p">
-              The price of AC is largely dependent on the BTC price. AC is beneficial for Bitcoin as it
-              increases scarcity, and the appreciation of Bitcoin is good for AC, <Hl
-              text="as it raises AC’s self price." color="#CC6600"/>
+              The price of AC is largely dependent on the BTC price. AC is beneficial for BTC as it increases scarcity, and the appreciation of BTC is good for AC, <Hl
+              text="as it raises AC’s self price. " color="#CC6600"/>
             </p>
           </div>
         </BlockWithTitle>
@@ -113,8 +120,7 @@ export default function Home() {
               Bitcoin. It is very cheap to issue at the start, allowing early adopters <Hl
               text="the chance to achieve a 10,000x return." color="#55FFFF"/> Whether you love BTC or hate it, burning
               it is cool, counter intuitive, and fun. It will also
-              get you Anarchy Coins — a new asset with huge growth potential. Additionally, burning BTC drives
-              its price up.
+              get you Anarchy Coins — a new asset with huge growth potential.
             </p>
 
             <p className="block-p">

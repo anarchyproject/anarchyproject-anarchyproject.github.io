@@ -143,12 +143,9 @@ export default function Mint() {
   const mintClick = () => {
     if (!isConnected) {
       // TODO
+      return;
     }
-    if (btcType === "tBTC") {
-      mintXACWithTBTC();
-    } else {
-      mintXACWithXBTC();
-    }
+    mintXACWithXBTC();
   }
 
   const mintXACWithTBTC = () => mintXAC(address, parseUnits(acToMint, 4), setMintState);

@@ -111,15 +111,25 @@ export function useMintXACWBTC(acToMint, setMintState) {
   const mintXACWithXBTC = async () => {
     try {
       setMintState({status: 'waitingApproval'});
-      const withdrawAmount = await getWithdrawAmount(acToMint, 8)
-      const approvalRes = await writeContract(config, {
+      const withdrawAmount = await getWithdrawAmount(acToMint, 8);
+
+      const currentAllowance = await readContract(config, {
         abi: xBTCAbi,
         address: xBTCContract,
-        functionName: "approve",
-        args: [xACContract, withdrawAmount],
+        functionName: "allowance",
+        args: [address, xACContract],
       });
 
-      await waitForTransactionReceipt(config, {hash: approvalRes});
+      if (currentAllowance < withdrawAmount) {
+        const approvalRes = await writeContract(config, {
+          abi: xBTCAbi,
+          address: xBTCContract,
+          functionName: "approve",
+          args: [xACContract, withdrawAmount],
+        });
+
+        await waitForTransactionReceipt(config, {hash: approvalRes});
+      }
 
       setMintState({status: 'waitingMint'});
       const mintRes = await writeContract(config, {

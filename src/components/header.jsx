@@ -27,7 +27,7 @@ export function Header() {
   return (
     <header className="header">
       <nav className="flex w-full flex-col text-sm/[64px] text-white sm:flex-row sm:text-base">
-        <div className="grid grid-cols-2 sm:grid-cols-3">
+        <div className="grid grid-cols-2 sm:flex">
           {NavLink('/', '[ HOME ]')}
           {NavLink('/mint', '[ MINT ]')}
           {/*{NavLink('/swap', '[ SWAP ]')}*/}

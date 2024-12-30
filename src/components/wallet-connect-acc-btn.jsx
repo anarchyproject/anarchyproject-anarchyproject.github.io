@@ -17,17 +17,17 @@ export function Account() {
 
   return (
     <div className="flex font-bios items-center justify-center" ref={ref}>
-      <div className="flex justify-center items-center p-3">{balance || 0} AC</div>
+      <div className="flex justify-center items-center p-1 sm:p-3 md:p-3">{balance || 0} AC</div>
       <div
         onClick={() => setIsOpen(true)}
-        className="flex relative justify-center items-center p-3 bg-[#00aa00]"
+        className="flex relative justify-center items-center p-1 sm:p-3 md:p-3 bg-[#00aa00]"
       >
         <div className="flex gap-3">
           <div>{address.slice(0, 3)}...{address.slice(-2)}</div>
           <div className="font-bios rotate-90">{'>'}</div>
         </div>
         {isOpen && (
-          <div className="absolute bg-[#181818] z-50 bottom-0 translate-y-full left-0 w-full p-4 gap-4 shadow-squareDefault flex flex-col">
+          <div className="absolute bg-[#181818] z-50 bottom-0 translate-y-full left-0 min-w-[145px] w-full p-4 gap-4 shadow-squareDefault flex flex-col">
           <button onClick={disconnect}>Disconnect</button>
         </div>
         )}

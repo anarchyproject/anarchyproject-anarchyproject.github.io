@@ -12,10 +12,6 @@ export function Footer() {
   return (
     <footer className="flex flex-col items-center gap-3 py-4">
       <div className="flex gap-5">
-        <a href="/#" target="_blank">
-          <Image width={24} height={24} src="/icons/Discord.svg" alt="discord"/>
-        </a>
-
         <a href="https://t.me/AnarchyCoin" target="_blank">
           <Image src={"/icon-telegram.svg"} alt="tg" width={24} height={24} />
         </a>

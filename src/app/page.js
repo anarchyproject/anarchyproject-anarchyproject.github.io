@@ -84,7 +84,7 @@ export default function Home() {
             <div className="flex gap-2 md:gap-5 xl:gap-8">
               <Hl text='Q:' color='#aa0000'/>
               <p className="block-p">
-                Alternatively, would it be more profitable to conceal one painting and then sell both at inflated prices?
+                Alternatively, would it be more profitable <Hl text='to conceal one painting and then sell both at inflated prices?' color='#aa0000'/>
               </p>
             </div>
             <div className="flex gap-2 xl:gap-8">
@@ -100,12 +100,13 @@ export default function Home() {
           <div className="flex flex-col gap-6 xl:gap-8">
             <p className="block-p">
               AC is a token created through the virtual burning of Bitcoin.
-              This process is virtual because all BTC are transferred to a special liquidity pool.
-              Each new AC issuance requires more BTC to be burned than the previous one.
+              This process is virtual because <Hl text='all BTC are transferred to a special liquidity pool. ' color="#CC6600"/>
+              Each <Hl text='new AC' color="#CC6600"/> issuance <Hl text="requires more BTC" /> to be burned than the previous one.
             </p>
             <p className="block-p">
-              AC has a finite potential supply.
-              Reaching this supply would require either burning all outstanding BTCs or utilizing BTC from the special liquidity pool, which would drive up AC&apos;s price.
+              <Hl text="AC has a" color="#CC6600"/> finite potential <Hl text="supply." color="#CC6600"/>
+              Reaching this supply would require either <Hl text="burning all" color="#CC6600"/> outstanding
+              <Hl text="BTCs or utilizing BTC from the special liquidity pool, which would drive up AC&apos;s price." color="#CC6600"/>
             </p>
             <p className="block-p">
               The price of AC is largely dependent on the BTC price. AC is beneficial for BTC as it increases scarcity, and the appreciation of BTC is good for AC, <Hl
@@ -117,10 +118,9 @@ export default function Home() {
           <div className="flex flex-col gap-6 xl:gap-8">
             <p className="block-p">
               AC is a <Hl text="new derivative asset" color="#55FFFF"/> designed for those who missed out on
-              Bitcoin. It is very cheap to issue at the start, allowing early adopters <Hl
-              text="the chance to achieve a 10,000x return." color="#55FFFF"/> Whether you love BTC or hate it, burning
-              it is cool, counter intuitive, and fun. It will also
-              get you Anarchy Coins — a new asset with huge growth potential.
+              Bitcoin. It is very cheap to issue at the start,  <Hl
+              text="allowing early adopters to achieve a 10,000x return." color="#55FFFF"/>
+              Whether you love or hate BTC, burning it is remarkable, counterintuitive, and fun. It will also get you Anarchy Coins, a new asset with huge growth potential.
             </p>
 
             <p className="block-p">
@@ -128,15 +128,8 @@ export default function Home() {
               href="https://groups.csail.mit.edu/mac/classes/6.805/articles/crypto/cypherpunks/may-crypto-manifesto.html"
               target="_blank"><Hl
               text="Crypto Anarchist Manifesto." color="#55FFFF"/></a>
-              Well, maybe. However we leave in a post-modern world. There is nothing Anarchist in owning Bitcoins
-              anymore — so do banks form Wall Street, ETFs, etc.
-            </p>
-
-            <p className="block-p">
-              In post-modern world
-              <Hl text="True anarchism is" color="#55FFFF"/>
-              <Hl text="in burning BTC… And mining the most valuable asset — " color="#fff"/>
-              <Hl text="freedom." color="#55FFFF"/>
+              Well, maybe. However, we leave in a postmodern world. There is nothing Anarchist about owning Bitcoins anymore.
+              <Hl text="True anarchism is in burning BTC… And mining the most valuable asset — freedom." color="#55FFFF"/>
             </p>
           </div>
         </BlockWithTitle>

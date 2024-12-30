@@ -26,17 +26,14 @@ export function Header() {
   }
   return (
     <header className="header">
-      <nav className="nav">
-        <div className="grid grid-cols-3 sm:flex">
+      <nav className="flex w-full flex-col text-sm/[64px] text-white sm:flex-row sm:text-base">
+        <div className="grid grid-cols-2 sm:grid-cols-3">
           {NavLink('/', '[ HOME ]')}
           {NavLink('/mint', '[ MINT ]')}
           {/*{NavLink('/swap', '[ SWAP ]')}*/}
         </div>
-        <div className="flex w-full flex-grow items-center justify-around sm:flex-grow-0 sm:justify-end">
+        <div className="flex w-full flex-grow items-center justify-around">
           <ConnectOrAccountButton />
-
-        {/*  <a href="https://x.com/#" target="_blank" className="nav-link text-nowrap">[ X ]</a>*/}
-        {/*  <a href="https://t.me/?" target="_blank" className="nav-link text-nowrap">[ Telegram ]</a>*/}
         </div>
       </nav>
     </header>

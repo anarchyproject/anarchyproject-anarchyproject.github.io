@@ -145,7 +145,20 @@ export function useMintXACWBTC(acToMint, setMintState) {
       resetCounters();
       return txRec2;
     } catch (e) {
-      setMintState({status: 'error', payload: {message: e?.details || e?.message}});
+      let message = e?.details || e?.message;
+      if (message.contains("User denied")) {
+        message = "User canceled the transaction";
+      }
+
+      if (message.contains("insufficient funds")) {
+        message = "You don’t have enough BTC to mint AC";
+      }
+
+      if (message.contains("Swap to mint failed")) {
+        message = "Try to mint more AC or buy AC from the Pool";
+      }
+
+      setMintState({ status: 'error', payload: { message } });
       console.log(e.message);
     }
   };
